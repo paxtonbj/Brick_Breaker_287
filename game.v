@@ -26,6 +26,7 @@ module game (
 
    wire [23:0] paddle_color;  //vga_color
    wire [23:0] blocks_color;
+	wire [23:0] ball_color;
 
     // VGA driver
     vga_driver vga(
@@ -48,6 +49,17 @@ module game (
 	
 	blocks my_blocks(x,y,active_pixels,blocks_color);
 	
+Ball_test my_ball_test (
+    .clk(clk),
+    .rst(rst),
+    .x(x),
+    .y(y),
+    .active_pixels(active_pixels),
+    .ball_color(ball_color)
+);
+
+
+	
 	reg [23:0] final_color;
 	
 	    always @(*) begin
@@ -60,6 +72,9 @@ module game (
         
         if (paddle_color != 24'h000000)
             final_color = paddle_color;
+			
+		  if (ball_color != 0)
+			final_color = ball_color;
     end
 
     always @(*) begin
@@ -67,6 +82,7 @@ module game (
         VGA_G = final_color[15:8];
         VGA_B = final_color[7:0];
     end
+
 
 endmodule
 	
