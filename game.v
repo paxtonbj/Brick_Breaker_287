@@ -49,15 +49,10 @@ module game (
 	
 	blocks my_blocks(x,y,active_pixels,blocks_color);
 	
-Ball_test my_ball_test (
-    .clk(clk),
-    .rst(rst),
-    .x(x),
-    .y(y),
-    .active_pixels(active_pixels),
-    .ball_color(ball_color)
-);
+	the_ball my_ball(clk,rst,SW,x,y,active_pixels,ball_color);
+	
 
+	
 
 	
 	reg [23:0] final_color;
@@ -73,7 +68,7 @@ Ball_test my_ball_test (
         if (paddle_color != 24'h000000)
             final_color = paddle_color;
 			
-		  if (ball_color != 0)
+		  if (ball_color != 24'h0000000)
 			final_color = ball_color;
     end
 

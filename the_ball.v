@@ -1,44 +1,25 @@
-module Ball_test(
+module the_ball(
 
-    input CLOCK_50, 
-    input [1:0] KEY,
-    input [9:0]SW,
+	input clk,
+	input rst,
+	input [9:0]SW,
+	input [9:0]x, 
+	input [9:0]y,
+	input active_pixels,
+	
+	output reg [23:0]vga_color
 
-    output                  VGA_BLANK_N,
-    output      [7:0]       VGA_B,
-    output                  VGA_CLK,
-    output      [7:0]       VGA_G,
-    output                  VGA_HS,
-    output      [7:0]       VGA_R,
-    output                  VGA_SYNC_N,
-    output                  VGA_VS
+   
 );
 
-    wire clk = CLOCK_50;
+    /* wire clk = CLOCK_50;
     wire rst = SW[0];
 
     reg [9:0] x;
     reg [9:0] y;
-    wire active_pixels;
+    wire active_pixels; */
 
-    vga_driver the_vga(
-        .clk(clk),
-        .rst(rst),
-
-        .vga_clk(VGA_CLK),
-		  
-        .hsync(VGA_HS),
-        .vsync(VGA_VS),
-
-        .active_pixels(active_pixels),
-
-        .xPixel(x),
-        .yPixel(y),
-
-        .VGA_BLANK_N(VGA_BLANK_N),
-        .VGA_SYNC_N(VGA_SYNC_N)
-    );
-
+    
 	 //Should only allow the box to move every 60Hz, smoothes out movement.
     reg [19:0] tick_count;
     reg tick_move;
@@ -74,7 +55,7 @@ module Ball_test(
         (x >= box_x && x < box_x + box_width) &&
         (y >= box_y && y < box_y + box_height);
 
-    reg [23:0] vga_color;
+    // reg [23:0] vga_color;
 
     assign VGA_R = vga_color[23:16];
     assign VGA_G = vga_color[15:8];
