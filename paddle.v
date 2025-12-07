@@ -11,49 +11,17 @@ module paddle(
 	input [9:0]y,
 	input active_pixels,
 	
-	output reg [23:0]vga_color
 	
-	/*output		          		VGA_BLANK_N,
-	output reg	     [7:0]		VGA_B,
-	output		          		VGA_CLK,
-	output reg	     [7:0]		VGA_G,
-	output		          		VGA_HS,
-	output reg	     [7:0]		VGA_R,
-	output		          		VGA_SYNC_N,
-	output		          		VGA_VS */
+	output reg [23:0]vga_color,
+	
+	output reg [9:0] paddle_x,
+	output reg [9:0] paddle_y,
+	output reg [9:0] paddle_width,
+	output reg [9:0] paddle_height
 	
 	
 	);
 
-	
-	
-
-
-	//assign rst = SW[0];
-	
-	
-	
-	
-	
-	
-	/* vga_driver the_vga(
-	.clk(clk),
-	.rst(rst),
-
-	.vga_clk(VGA_CLK),
-
-	.hsync(VGA_HS),
-	.vsync(VGA_VS),
-
-	.active_pixels(active_pixels),
-
-	.xPixel(x),
-	.yPixel(y),
-
-	.VGA_BLANK_N(VGA_BLANK_N),
-	.VGA_SYNC_N(VGA_SYNC_N)
-	);
-	*/
 	
 	 //Should only allow the box to move every 60Hz, smoothes out movement.
 	//60Hz tick = 50MHz/60 = 833,333.3
@@ -69,7 +37,7 @@ module paddle(
 				tick_count <= 20'b0;
 				tick_move <= 1'b0;
 			end
-			else if (tick_count == 20'd277777) // smaller # means faster speed, 833333/3 = 277777
+			else if (tick_count == 20'd208333) // smaller # means faster speed, 833333/4 = 208333
 			begin
 				tick_move <= 1'b1;
 				tick_count <= 20'd0;
@@ -91,6 +59,7 @@ module paddle(
 	reg [9:0] box_width = 10'd100;
 	reg [9:0] box_height = 10'd20;
 	
+
 	
 	// Screen is 640 x 480
 	
@@ -111,7 +80,7 @@ module paddle(
 		 end
 		 else if (in_box)
 		  begin
-				vga_color = 24'hfffffff; // change value to change color, ffffff = white.
+				vga_color = 24'hffffff; // change value to change color, ffffff = white.
 		  end
 		 else
 		  begin
@@ -127,6 +96,12 @@ module paddle(
 			begin
 			box_x <= 10'd0; // Box's x starting positon
 			box_y <= 10'd440; //Box's y starting postion
+			
+			paddle_x <= box_x;
+			paddle_y <= box_y;
+			paddle_width <= box_width;
+			paddle_height <= box_height; 
+			
 		
 			end
 			
@@ -137,14 +112,19 @@ module paddle(
 				if(tick_move == 1'b1) 
 				begin
 			
-					if(KEY[1] == 1'b0 && box_x > 10'd0 && box_x <= 10'd545) //max screen size is 640, to find limit -> 640 - box width, plus some extra for this case
+					if(KEY[1] == 1'b0 && box_x > 10'd0 && box_x + box_width <= 10'd645) //max screen size is 640, to find limit -> 640 - box width, plus some extra for this case
 				
 						box_x <= box_x - 1'b1;
 						
-					 if(KEY[0] == 1'b0 && box_x >= 10'd0 && box_x <= 10'd540) // 640 - box width = max distance
+					 if(KEY[0] == 1'b0 && box_x >= 10'd0 && box_x + box_width <= 10'd640) // 640 - box width = max distance
 					
 						box_x <= box_x + 1'b1;
 				end
+				
+					paddle_x <= box_x;
+					paddle_y <= box_y;
+					paddle_width <= box_width;
+					paddle_height <= box_height; 
 				
 			end
 	

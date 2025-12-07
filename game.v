@@ -42,14 +42,67 @@ module game (
         .VGA_SYNC_N(VGA_SYNC_N)
     );
 	 
+	 reg [9:0] paddle_x;
+	 reg [9:0] paddle_y;
+	 reg [9:0] paddle_width;
+	 reg [9:0] paddle_height;
+	 
+	 reg [9:0] ball_x;
+	 reg [9:0] ball_y;
+	 reg [9:0] ball_width;
+	 reg [9:0] ball_height;
+	 
+	 reg [9:0] block_x;
+	 reg [9:0] block_y;
+	 reg [9:0] block_width;
+	 reg [9:0] block_height;
+	 
+	 reg collide_paddle;
+	 reg collide_block;
+	 reg collide_block2;
+	 reg collide_block3;
+	 reg collide_block4;
+	 reg collide_block5;
+	 reg collide_block6;
+	 reg collide_block7;
+	 reg collide_block8;
+	 reg collide_block9;
+	 reg collide_block10;
+	 
+	 reg alive;
+	 reg alive2;
+	 reg alive3;
+	 reg alive4;
+	 reg alive5;
+	 reg alive6;
+	 reg alive7;
+	 reg alive8;
+	 reg alive9;
+	 reg aive10;
+	 
 	 
 
 	
-	paddle my_paddle(clk,rst,KEY,SW,x,y,active_pixels,paddle_color);
+	paddle my_paddle(clk,rst,KEY,SW,x,y,active_pixels,paddle_color, paddle_x, paddle_y, paddle_width, paddle_height);
 	
-	blocks my_blocks(x,y,active_pixels,blocks_color);
+	blocks my_blocks(x,y,active_pixels, alive, alive2, alive3, alive4, alive5, alive6, alive7,alive8,alive9,alive10, blocks_color, block_x, block_y, block_width, block_height);
 	
-	the_ball my_ball(clk,rst,SW,x,y,active_pixels,ball_color);
+	the_ball my_ball(clk,rst,SW,x,y,active_pixels, collide_paddle, collide_block, collide_block2, collide_block3,
+						  collide_block4, collide_block5, collide_block6, collide_block7, collide_block8, collide_block9, collide_block10,
+						  ball_color, ball_x, ball_y, ball_width, Ball_height);
+	
+	collision my_collision(clk,rst,paddle_x,paddle_y,paddle_width,paddle_height,
+							    ball_x, ball_y, ball_width, ball_height,
+							    block_x, block_y, block_width, block_height, collide_paddle, 
+								 collide_block, collide_block2, collide_block3, collide_block4,
+								 collide_block5, collide_block6, collide_block7, collide_block8,
+								 collide_block9, collide_block10 );
+	
+	life my_alive(clk,rst,
+	collide_block,collide_block2,collide_block3,collide_block4,collide_block5,
+	collide_block6,collide_block7,collide_block8,collide_block9,collide_block10,
+	alive,alive2,alive3,alive4,alive5,alive6,alive7,alive8,alive9,alive10);
+						  
 	
 
 	
