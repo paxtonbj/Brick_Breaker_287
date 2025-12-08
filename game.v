@@ -42,43 +42,43 @@ module game (
         .VGA_SYNC_N(VGA_SYNC_N)
     );
 	 
-	 reg [9:0] paddle_x;
-	 reg [9:0] paddle_y;
-	 reg [9:0] paddle_width;
-	 reg [9:0] paddle_height;
+	 wire [9:0] paddle_x;
+	 wire [9:0] paddle_y;
+	 wire [9:0] paddle_width;
+	 wire [9:0] paddle_height;
 	 
-	 reg [9:0] ball_x;
-	 reg [9:0] ball_y;
-	 reg [9:0] ball_width;
-	 reg [9:0] ball_height;
+	 wire [9:0] ball_x;
+	 wire [9:0] ball_y;
+	 wire [9:0] ball_width;
+	 wire [9:0] ball_height;
 	 
-	 reg [9:0] block_x;
-	 reg [9:0] block_y;
-	 reg [9:0] block_width;
-	 reg [9:0] block_height;
+	 wire [9:0] block_x;
+	 wire [9:0] block_y;
+	 wire [9:0] block_width;
+	 wire [9:0] block_height;
 	 
-	 reg collide_paddle;
-	 reg collide_block;
-	 reg collide_block2;
-	 reg collide_block3;
-	 reg collide_block4;
-	 reg collide_block5;
-	 reg collide_block6;
-	 reg collide_block7;
-	 reg collide_block8;
-	 reg collide_block9;
-	 reg collide_block10;
+	 wire collide_paddle;
+	 wire collide_block;
+	 wire collide_block2;
+	 wire collide_block3;
+	 wire collide_block4;
+	 wire collide_block5;
+	 wire collide_block6;
+	 wire collide_block7;
+	 wire collide_block8;
+	 wire collide_block9;
+	 wire collide_block10;
 	 
-	 reg alive;
-	 reg alive2;
-	 reg alive3;
-	 reg alive4;
-	 reg alive5;
-	 reg alive6;
-	 reg alive7;
-	 reg alive8;
-	 reg alive9;
-	 reg aive10;
+	 wire alive;
+	 wire alive2;
+	 wire alive3;
+	 wire alive4;
+	 wire alive5;
+	 wire alive6;
+	 wire alive7;
+	 wire alive8;
+	 wire alive9;
+	 wire alive10;
 	 
 	 
 
@@ -89,11 +89,12 @@ module game (
 	
 	the_ball my_ball(clk,rst,SW,x,y,active_pixels, collide_paddle, collide_block, collide_block2, collide_block3,
 						  collide_block4, collide_block5, collide_block6, collide_block7, collide_block8, collide_block9, collide_block10,
-						  ball_color, ball_x, ball_y, ball_width, Ball_height);
+						  ball_color, ball_x, ball_y, ball_width, ball_height);
 	
 	collision my_collision(clk,rst,paddle_x,paddle_y,paddle_width,paddle_height,
 							    ball_x, ball_y, ball_width, ball_height,
-							    block_x, block_y, block_width, block_height, collide_paddle, 
+							    block_x, block_y, block_width, block_height, 
+								 alive,alive2,alive3,alive4,alive5,alive6,alive7,alive8,alive9,alive10, collide_paddle, 
 								 collide_block, collide_block2, collide_block3, collide_block4,
 								 collide_block5, collide_block6, collide_block7, collide_block8,
 								 collide_block9, collide_block10 );

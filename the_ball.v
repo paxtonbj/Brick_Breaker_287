@@ -163,52 +163,59 @@ module the_ball(
 				begin
 					rflct_y <= 1'b0; //reflect down
 				end
+				else
+					if(collide_block2)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
+					
+				else
+					if(collide_block3)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
+					
+				else
+					if(collide_block4)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
 				
-				if(collide_block2)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
+				else
+					if(collide_block5)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
 				
-				if(collide_block3)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
+				else
+					if(collide_block6)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
 				
-				if(collide_block4)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
+				else
+					if(collide_block7)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
 				
-				if(collide_block5)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
+				else
+					if(collide_block8)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
 				
-				if(collide_block6)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
+				else
+					if(collide_block9)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
 				
-				
-				if(collide_block7)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
-				
-				if(collide_block8)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
-				
-				if(collide_block9)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
-				
-				if(collide_block10)
-				begin
-					rflct_y <= 1'b0; //reflect down
-				end
+				else
+					if(collide_block10)
+					begin
+						rflct_y <= 1'b0; //reflect down
+					end
 				
 				ball_x <= box_x;
 				ball_y <= box_y;

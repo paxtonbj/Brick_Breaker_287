@@ -57,17 +57,17 @@ module blocks(
 	
 	// Screen is 640 x 480
 	
-	wire in_box = (x >= box_x && x < box_x + box_width) && (y >= box_y && y < box_y + box_height);
-	wire in_box2 = (x >= box2_x && x < box2_x + box_width) && (y >= box2_y && y < box2_y + box_height);
-	wire in_box3 = (x >= box3_x && x < box3_x + box_width) && (y >= box3_y && y < box3_y + box_height);
-	wire in_box4 = (x >= box4_x && x < box4_x + box_width) && (y >= box4_y && y < box4_y + box_height);
-	wire in_box5 = (x >= box5_x && x < box5_x + box_width) && (y >= box5_y && y < box5_y + box_height);
+	wire in_box = (alive == 1'b1) &&(x >= box_x && x < box_x + box_width) && (y >= box_y && y < box_y + box_height);
+	wire in_box2 = (alive2 == 1'b1) &&(x >= box2_x && x < box2_x + box_width) && (y >= box2_y && y < box2_y + box_height);
+	wire in_box3 = (alive3 == 1'b1) &&(x >= box3_x && x < box3_x + box_width) && (y >= box3_y && y < box3_y + box_height);
+	wire in_box4 = (alive4 == 1'b1) &&(x >= box4_x && x < box4_x + box_width) && (y >= box4_y && y < box4_y + box_height);
+	wire in_box5 =  (alive5 == 1'b1) &&(x >= box5_x && x < box5_x + box_width) && (y >= box5_y && y < box5_y + box_height);
 	
-	wire in_box6 = (x >= box6_x && x < box6_x + box_width) && (y >= box6_y && y < box6_y + box_height);
-	wire in_box7 = (x >= box7_x && x < box7_x + box_width) && (y >= box7_y && y < box7_y + box_height);
-	wire in_box8 = (x >= box8_x && x < box8_x + box_width) && (y >= box8_y && y < box8_y + box_height);
-	wire in_box9 = (x >= box9_x && x < box9_x + box_width) && (y >= box9_y && y < box9_y + box_height);
-	wire in_box10 = (x >= box10_x && x < box10_x + box_width) && (y >= box10_y && y < box10_y + box_height);
+	wire in_box6 = (alive6 == 1'b1) &&(x >= box6_x && x < box6_x + box_width) && (y >= box6_y && y < box6_y + box_height);
+	wire in_box7 = (alive7 == 1'b1) &&(x >= box7_x && x < box7_x + box_width) && (y >= box7_y && y < box7_y + box_height);
+	wire in_box8 = (alive8 == 1'b1) &&(x >= box8_x && x < box8_x + box_width) && (y >= box8_y && y < box8_y + box_height);
+	wire in_box9 = (alive9 == 1'b1) &&(x >= box9_x && x < box9_x + box_width) && (y >= box9_y && y < box9_y + box_height);
+	wire in_box10 = (alive10 == 1'b1) &&(x >= box10_x && x < box10_x + box_width) && (y >= box10_y && y < box10_y + box_height);
 	
 	
 	always @(*)
@@ -76,24 +76,23 @@ module blocks(
 
 		
 		if(!active_pixels)
-		 begin
+		begin
 			
 			vga_color = 24'd0;
 			
 		 end
-		 else if( ((in_box && (alive == 1'b1)) | (in_box2 && (alive2 == 1'b1)) | (in_box3 && (alive3 == 1'b1)) 
-				  | (in_box4 && (alive4 == 1'b1)) | (in_box5 && (alive5 == 1'b1)) | (in_box6 && (alive6 == 1'b1)) 
-				  | (in_box7 && (alive7 == 1'b1)) | (in_box8 && (alive8 == 1'b1)) | (in_box9 && (alive9 == 1'b1)) 
-				  | (in_box10 && (alive10 == 1'b1)) ))
-		  begin
-				vga_color = 24'hffffff; // change value to change color, ffffff = white.
-		  end
-		 else
-		  begin
-				vga_color= 24'd0;
-		  end
-		
+			else if (in_box || in_box2 || in_box3 || in_box4 || in_box5 ||
+         in_box6 || in_box7 || in_box8 || in_box9 || in_box10)
+			begin
+			vga_color = 24'hffffff; // white blocks
+			end
+			else
+			begin
+    vga_color = 24'd0; // background
+			end
 		end
+
+
 
 		assign block_x = box_x;
 		assign block_y = box_y;
