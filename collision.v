@@ -63,6 +63,26 @@ reg [9:0] block9_y;
 reg [9:0] block10_x;
 reg [9:0] block10_y;
 
+reg [3:0] hold;
+reg go;
+
+always @ (posedge clk or negedge rst)
+begin
+	if(!rst)
+	begin
+		hold <= 4'b0;
+	end
+	else if( hold == 3'd15)
+	begin
+		go <= 1'b1;
+		hold <= 1'b0;
+	end
+	else
+	begin
+		hold <= hold + 1'b1;
+	end
+end
+		
 
 
 	
@@ -78,79 +98,100 @@ reg [9:0] block10_y;
 	
 			
 			
-			if ((alive == 1'b1) && (ball_x < block_x + block_width) && (ball_x + ball_width > block_x) && (ball_y < block_y + block_height) && (ball_y + ball_width > block_y))
+			if ((alive == 1'b1) && (ball_x < block_x + block_width) && (ball_x + ball_width > block_x) && (ball_y < block_y + block_height) && (ball_y + ball_height > block_y))
 			begin
 				collide_block <= 1'b1;
 			end
-			else
-				collide_block <= 1'b0;
+			else if (alive == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block <= 1'b0;
+				end
 			
-			if((alive2 == 1'b1) && (ball_x < block2_x + block_width) && (ball_x + ball_width > block2_x) && (ball_y < block_y + block_height) && (ball_y + ball_width > block_y))
+			
+			if((alive2 == 1'b1) && (ball_x < block2_x + block_width) && (ball_x + ball_width > block2_x) && (ball_y < block2_y + block_height) && (ball_y + ball_height > block2_y))
 			begin
 				collide_block2 <= 1'b1;
 			end
-			else
-				collide_block2 <= 1'b0;
+			else if (alive2 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block2 <= 1'b0;
+				end
 			
-			if((alive3 == 1'b1) && (ball_x < block3_x + block_width) && (ball_x + ball_width > block3_x) && (ball_y < block_y + block_height) && (ball_y + ball_width > block_y))
+			if((alive3 == 1'b1) && (ball_x < block3_x + block_width) && (ball_x + ball_width > block3_x) && (ball_y < block3_y + block_height) && (ball_y + ball_height > block3_y))
 			begin
 				collide_block3 <= 1'b1;
 			end
-			else
-				collide_block3 <= 1'b0;
+			else if (alive3 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block3 <= 1'b0;
+				end
 			
-			if((alive4 == 1'b1) && (ball_x < block4_x + block_width) && (ball_x + ball_width > block4_x) && (ball_y < block_y + block_height) && (ball_y + ball_width > block_y))
+			if((alive4 == 1'b1) && (ball_x < block4_x + block_width) && (ball_x + ball_width > block4_x) && (ball_y < block4_y + block_height) && (ball_y + ball_height > block4_y))
 			begin
 				collide_block4 <= 1'b1;
 			end
-			else
-				collide_block4 <= 1'b0;
+			else if (alive4 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block4 <= 1'b0;
+				end
 			
-			if((alive5 == 1'b1) && (ball_x < block5_x + block_width) && (ball_x + ball_width > block5_x) && (ball_y < block_y + block_height) && (ball_y + ball_width > block_y))
+			if((alive5 == 1'b1) && (ball_x < block5_x + block_width) && (ball_x + ball_width > block5_x) && (ball_y < block5_y + block_height) && (ball_y + ball_height > block5_y))
 			begin
 				collide_block5 <= 1'b1;
 			end
-			else
-				collide_block5 <= 1'b0;
+			else if (alive5 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block5 <= 1'b0;
+				end
 			
-			if((alive6 == 1'b1) && (ball_x < block6_x + block_width) && (ball_x + ball_width > block6_x) && (ball_y < block6_y + block_height) && (ball_y + ball_width > block6_y))
+			if((alive6 == 1'b1) && (ball_x < block6_x + block_width) && (ball_x + ball_width > block6_x) && (ball_y < block6_y + block_height) && (ball_y + ball_height > block6_y))
 			begin
 				collide_block6 <= 1'b1;
 			end
-			else
-				collide_block6 <= 1'b0;
+			else if (alive6 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block6 <= 1'b0;
+				end
 			
-			if((alive7 == 1'b1) && (ball_x < block7_x + block_width) && (ball_x + ball_width > block7_x) && (ball_y < block7_y + block_height) && (ball_y + ball_width > block7_y))
+			if((alive7 == 1'b1) && (ball_x < block7_x + block_width) && (ball_x + ball_width > block7_x) && (ball_y < block7_y + block_height) && (ball_y + ball_height > block7_y))
 			begin
 				collide_block7 <= 1'b1;
 			end
-			else
-				collide_block7 <= 1'b0;
+			else if (alive7 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block7 <= 1'b0;
+				end
 			
-			if((alive8 == 1'b1) && (ball_x < block8_x + block_width) && (ball_x + ball_width > block8_x) && (ball_y < block8_y + block_height) && (ball_y + ball_width > block8_y))
+			if((alive8 == 1'b1) && (ball_x < block8_x + block_width) && (ball_x + ball_width > block8_x) && (ball_y < block8_y + block_height) && (ball_y + ball_height > block8_y))
 			begin
 				collide_block8 <= 1'b1;
 			end
-			else
-				collide_block8 <= 1'b0;
+			else if (alive8 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block8 <= 1'b0;
+				end
 				
-			if((alive9 == 1'b1) && (ball_x < block9_x + block_width) && (ball_x + ball_width > block9_x) && (ball_y < block9_y + block_height) && (ball_y + ball_width > block9_y))
+			if((alive9 == 1'b1) && (ball_x < block9_x + block_width) && (ball_x + ball_width > block9_x) && (ball_y < block9_y + block_height) && (ball_y + ball_height > block9_y))
 			begin
 				collide_block9 <= 1'b1;
 			end
-			else
-				collide_block9 <= 1'b0;
+			else if (alive9 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block9 <= 1'b0;
+				end
 			
-			if((alive10 == 1'b1) && (ball_x < block10_x + block_width) && (ball_x + ball_width > block10_x) && (ball_y < block10_y + block_height) && (ball_y + ball_width > block10_y))
+			if((alive10 == 1'b1) && (ball_x < block10_x + block_width) && (ball_x + ball_width > block10_x) && (ball_y < block10_y + block_height) && (ball_y + ball_height > block10_y))
 			begin
 				collide_block10 <= 1'b1;
 			end
-			else
-				collide_block10 <= 1'b0;
+			else if (alive10 == 1'b0)  // Only clear when block is dead
+				begin
+					collide_block10 <= 1'b0;
+				end
 			
 			
 		
-			if ((ball_x < paddle_x + paddle_width) && (ball_x + ball_width > paddle_x) && (ball_y < paddle_y + paddle_height) && (ball_y + ball_width > paddle_y))
+			if ((go == 1'b1) && (ball_x < paddle_x + paddle_width) && (ball_x + ball_width > paddle_x) && (ball_y < paddle_y + paddle_height) && (ball_y + ball_width > paddle_y))
 			begin
 				collide_paddle <= 1'b1;
 			end
