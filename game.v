@@ -9,7 +9,11 @@ module game (
 	output		          		VGA_HS,
 	output reg	     [7:0]		VGA_R,
 	output		          		VGA_SYNC_N,
-	output		          		VGA_VS
+	output		          		VGA_VS,
+	output           [6:0]     HEX0,
+	output           [6:0]     HEX1,
+	output           [6:0]     HEX2
+	
 );
 	
 	assign clk = CLOCK_50;
@@ -87,6 +91,7 @@ module game (
 	
 	reg win;
 	wire lose;
+	reg [7:0] score;
 	
 	paddle my_paddle(
 		.clk(clk),
@@ -157,7 +162,8 @@ module game (
 		.block_width(block_width),          // FIXED: was block_wdith
 		.block_height(block_height),
 		.paddle_x(paddle_x),                // ADDED: needed for aiming
-		.paddle_width(paddle_width),        // ADDED: needed for aiming
+		.paddle_width(paddle_width),			// ADDED: needed for aiming
+		.win(win),										
 		.vga_color(ball_color),
 		.ball_x(ball_x),
 		.ball_y(ball_y),
@@ -253,6 +259,33 @@ module game (
 	
 	win my_win (x, y, win,active_pixels, win_color);
 	lose my_lose (x, y, lose,active_pixels, lose_color);
+	
+	score my_score (.clk(clk), .rst(rst), .lose(lose), .collide_block(collide_block),
+		.collide_block2(collide_block2), .collide_block3(collide_block3),
+		.collide_block4(collide_block4),	.collide_block5(collide_block5),		
+		.collide_block6(collide_block6), .collide_block7(collide_block7),
+		.collide_block8(collide_block8), .collide_block9(collide_block9),
+		.collide_block10(collide_block10), .collide_block11(collide_block11),
+		.collide_block12(collide_block12), .collide_block13(collide_block13),
+		.collide_block14(collide_block14), .collide_block15(collide_block15),
+		.score(score) );
+		
+		
+	reg [3:0] seg_ones;
+	reg [3:0] seg_tens;
+	reg [3:0] seg_hunds;
+	
+	seven_segment seg0 ( seg_ones,HEX0);
+	seven_segment seg1 (seg_tens, HEX1);
+	seven_segment seg10 (seg_hunds, HEX2);
+	
+	always @ (*)
+	begin
+		seg_ones = score % 10;
+		seg_tens = (score / 10) % 10;
+		seg_hunds = score / 100;
+		
+	end
 	
 	always @ (*)
 	begin

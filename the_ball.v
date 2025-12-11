@@ -26,8 +26,9 @@ module the_ball(
 	input [9:0] block_y,
 	input [9:0] block_width,
 	input [9:0] block_height,
-	input [9:0] paddle_x,      // Add paddle position input
-	input [9:0] paddle_width,  // Add paddle width input
+	input [9:0] paddle_x,
+	input [9:0] paddle_width,
+	input win,
 	
 	output reg [23:0]vga_color,
 	
@@ -38,16 +39,21 @@ module the_ball(
 	output reg lose
 );
    
-	//Should only allow the box to move every 60Hz, smoothes out movement.
+	// Tick counter for movement timing
 	reg [19:0] tick_count;
 	reg tick_move;
+	
+	// Hard mode: SW[1] controls speed
+	// Normal mode: 416666 cycles (~60Hz at 25MHz)
+	// Hard mode: 208333 cycles (~120Hz - 2x faster)
+	wire [19:0] speed_threshold = SW[1] ? 20'd208333 : 20'd416666;
 	
 	always @(posedge clk or negedge rst) begin
 		if (!rst) begin
 			tick_count <= 0;
 			tick_move  <= 0;
 		end  
-		else if (tick_count == 20'd416666) begin
+		else if (tick_count >= speed_threshold) begin
 			tick_count <= 0;
 			tick_move  <= 1;
 		end
@@ -67,7 +73,7 @@ module the_ball(
 	reg rflct_y;
 	reg hit_block;
 	reg hit_block_side;
-	reg paddle_hit;  // Track if we've processed this paddle collision
+	reg paddle_hit;
 	
 	
 	
@@ -102,12 +108,12 @@ module the_ball(
 	begin
 		if (!rst)
 		begin
-			box_x <= 10'd310;     // Center horizontally
-			box_y <= 10'd350;     // Start closer to paddle
+			box_x <= 10'd340;
+			box_y <= 10'd240;
 			vx <= 2'd1;
 			vy <= 2'd1;
 			rflct_x <= 1'b0;
-			rflct_y <= 1'b1;      // Start going UP
+			rflct_y <= 1'b1;
 			hit_block <= 1'b0;
 			hit_block_side <= 1'b0;
 			paddle_hit <= 1'b0;
@@ -129,9 +135,9 @@ module the_ball(
 				// Better side detection: check if ball is coming from side
 				// Check if ball center is well within the block's vertical span
 				if ((box_y + 10'd10 > block_y + 10'd5) && (box_y + 10'd10 < block_y + 10'd39))
-					hit_block_side <= 1'b1;  // Side collision - ball is at same height as blocks
+					hit_block_side <= 1'b1;  // Side collision
 				else
-					hit_block_side <= 1'b0;  // Top/bottom collision - ball hitting from below
+					hit_block_side <= 1'b0;  // Top/bottom collision
 			end
 			
 			// Handle paddle collision detection with aiming 
@@ -141,14 +147,14 @@ module the_ball(
 				rflct_y <= 1'b1;  // Always reflect up
 				
 				// Calculate where ball hit on paddle
-				ball_center_x = box_x + 10'd10;  // Ball center
-				paddle_center_x = paddle_x + (paddle_width >> 1);  // Paddle center
-				hit_offset = ball_center_x - paddle_center_x;  // Offset from center
+				ball_center_x = box_x + 10'd10;
+				paddle_center_x = paddle_x + (paddle_width >> 1);
+				hit_offset = ball_center_x - paddle_center_x;
 				
 				// Adjust horizontal direction based on hit position
 				if (hit_offset < 0)  // Hit LEFT half of paddle
 				begin
-					rflct_x <= 1'b1;  // Go LEFT holy crap this sucked 
+					rflct_x <= 1'b1;  // Go LEFT
 				end
 				else  // Hit RIGHT half of paddle
 				begin
@@ -164,13 +170,13 @@ module the_ball(
 				// X-reflection (wall bouncing)
 				if(box_x <= 10'd1)
 				begin
-					rflct_x <= 1'b0;  // Hit left wall, go right
-					box_x <= 10'd1;    // Clamp position
+					rflct_x <= 1'b0;
+					box_x <= 10'd1;
 				end
 				if(box_x + box_width >= 10'd639)
 				begin
-					rflct_x <= 1'b1;  // Hit right wall, go left
-					box_x <= 10'd639 - box_width;  // Clamp position
+					rflct_x <= 1'b1;
+					box_x <= 10'd639 - box_width;
 				end
 				
 				// Move horizontally based on reflection state
@@ -182,19 +188,19 @@ module the_ball(
 				// Y-reflection
 				if(box_y == 10'd0)
 					rflct_y <= 1'b0;
-				// No bottom wall reflection - let ball fall through for loss condition
-				if(box_y == 10'd480)
+				if(box_y == 10'd480 && !win)
 					lose <= 1'b1;
+				
 				// Handle block collisions
 				if(hit_block)
 				begin
 					if (hit_block_side)
 					begin
-						rflct_x <= ~rflct_x;  // Flip horizontal direction
-						rflct_y <= 1'b0;      // ALSO reflect down
+						rflct_x <= ~rflct_x;
+						rflct_y <= 1'b0;
 					end
 					else
-						rflct_y <= 1'b0;  // Reflect down (vertical)
+						rflct_y <= 1'b0;
 					
 					hit_block <= 1'b0;
 					hit_block_side <= 1'b0;
