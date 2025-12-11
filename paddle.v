@@ -58,7 +58,7 @@ module paddle(
 		end
 		else if (in_box)
 		begin
-			vga_color = 24'hffffff; // white
+			vga_color = 24'h696969; // grey
 		end
 		else
 		begin

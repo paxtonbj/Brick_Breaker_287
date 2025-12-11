@@ -17,6 +17,11 @@ module the_ball(
 	input collide_block8,
 	input collide_block9,
 	input collide_block10,
+	input collide_block11,
+	input collide_block12,
+	input collide_block13,
+	input collide_block14,
+	input collide_block15,
 	input [9:0] block_x,
 	input [9:0] block_y,
 	input [9:0] block_width,
@@ -29,7 +34,8 @@ module the_ball(
 	output reg [9:0] ball_x,
 	output reg [9:0] ball_y,
 	output reg [9:0] ball_width,
-	output reg [9:0] ball_height
+	output reg [9:0] ball_height,
+	output reg lose
 );
    
 	//Should only allow the box to move every 60Hz, smoothes out movement.
@@ -63,6 +69,8 @@ module the_ball(
 	reg hit_block_side;
 	reg paddle_hit;  // Track if we've processed this paddle collision
 	
+	
+	
 	reg [9:0] box_width  = 10'd20;
 	reg [9:0] box_height = 10'd20;
 	
@@ -74,7 +82,8 @@ module the_ball(
 	wire collide_any = collide_block  || collide_block2 || collide_block3 ||
 					   collide_block4 || collide_block5 || collide_block6 ||
 					   collide_block7 || collide_block8 || collide_block9 ||
-					   collide_block10;
+					   collide_block10 || collide_block11 || collide_block12 ||
+					   collide_block13 || collide_block14 || collide_block15;
 
 	wire in_box = 
 		(x >= box_x && x < box_x + box_width) &&
@@ -107,6 +116,8 @@ module the_ball(
 			ball_y <= 10'd350;
 			ball_width <= box_width;
 			ball_height <= box_height;
+			
+			lose <= 1'b0;
 		end
 		else 
 		begin
@@ -172,7 +183,8 @@ module the_ball(
 				if(box_y == 10'd0)
 					rflct_y <= 1'b0;
 				// No bottom wall reflection - let ball fall through for loss condition
-				
+				if(box_y == 10'd480)
+					lose <= 1'b1;
 				// Handle block collisions
 				if(hit_block)
 				begin
