@@ -109,7 +109,7 @@ module the_ball(
 		if (!rst)
 		begin
 			box_x <= 10'd340;
-			box_y <= 10'd240;
+			box_y <= 10'd455;
 			vx <= 2'd1;
 			vy <= 2'd1;
 			rflct_x <= 1'b0;
